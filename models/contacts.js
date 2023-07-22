@@ -7,6 +7,7 @@ const listContacts = async () => {
 	const contacts = await fs.readFile(contactsPath, 'utf-8')
 	return JSON.parse(contacts)
 }
+
 const getContactById = async (contactId) => {
 	const contacts = await listContacts()
 	const foundContact = contacts.find((contact) => contact.id === contactId)
@@ -42,11 +43,12 @@ const addContact = async (name, email, phone, id) => {
 const updateContact = async (contactId, body) => {
 	const contacts = await listContacts()
 	const index = contacts.findIndex((contact) => contact.id === contactId)
-	if (index === -1) return null
 
+	if (index === -1) return null
+	
 	contacts[index] = { id: contactId, ...body }
 
-	await fs.readFile(contactsPath, JSON.stringify(contacts, null, 2))
+	await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2))
 
 	return contacts[index]
 }
