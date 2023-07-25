@@ -14,7 +14,9 @@ const contactSchema = new mongoose.Schema({
 	favorite: {
 		type: Boolean,
 		default: false,
-	},
+	}
+}, {
+	versionKey: false
 })
 
 module.exports = mongoose.model('Contact', contactSchema)
