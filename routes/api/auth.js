@@ -7,9 +7,7 @@ const jsonParser = express.json()
 
 router.post('/users/register', jsonParser, authController.registerUser)
 
-router.post('/users/login', jsonParser, async (req, res, next) => {
-	res.json({ message: 'template message' })
-})
+router.post('/users/login', jsonParser, authController.loginUser)
 
 router.post('/users/logout', jsonParser, async (req, res, next) => {
 	res.json({ message: 'template message' })
