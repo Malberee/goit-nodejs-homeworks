@@ -8,6 +8,8 @@ const auth = require('./middleware/auth')
 
 require('./db')
 
+require('./db')
+
 const app = express()
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
