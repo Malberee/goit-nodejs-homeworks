@@ -2,7 +2,7 @@ const Contact = require('../models/contact')
 
 const listContacts = async (req, res, next) => {
 	try {
-		const result = await Contact.find()
+		const result = await Contact.find({ owner: req.user.id })
 
 		return res.json(result)
 	} catch (err) {
@@ -14,7 +14,7 @@ const getContactById = async (req, res, next) => {
 	const { contactId } = req.params
 
 	try {
-		const result = await Contact.findById(contactId)
+		const result = await Contact.findOne({ _id: contactId, owner: req.user.id })
 
 		if (result === null) return res.status(404).send('Contact not found')
 
@@ -28,9 +28,14 @@ const removeContact = async (req, res, next) => {
 	const { contactId } = req.params
 
 	try {
-		const result = await Contact.findByIdAndRemove(contactId)
+		const result = await Contact.findOneAndRemove({
+			_id: contactId,
+			owner: req.user.id,
+		})
 
-		if (result === null) return res.status(404).send('Contact not found')
+		if (result === null) {
+			return res.status(404).send('Contact not found')
+		}
 
 		return res.status(204).end()
 	} catch (err) {
@@ -45,6 +50,7 @@ const addContact = async (req, res, next) => {
 		email,
 		phone,
 		favorite: false,
+		owner: req.user.id,
 	}
 
 	try {
@@ -67,9 +73,13 @@ const updateContact = async (req, res, next) => {
 	}
 
 	try {
-		const result = await Contact.findByIdAndUpdate(contactId, contact, {
-			new: true,
-		})
+		const result = await Contact.findOneAndUpdate(
+			{ _id: contactId, owner: req.user.id },
+			contact,
+			{
+				new: true,
+			}
+		)
 
 		if (result === null) return res.status(404).send('Contact not found')
 
@@ -85,7 +95,7 @@ const updateStatusContact = async (req, res, next) => {
 
 	try {
 		const result = await Contact.findOneAndUpdate(
-			{ _id: contactId },
+			{ _id: contactId, owner: req.user.id },
 			{ favorite },
 			{ new: true }
 		)

@@ -4,6 +4,7 @@ const cors = require('cors')
 
 const contactsRouter = require('./routes/api/contacts')
 const authRouter = require('./routes/api/auth')
+const auth = require('./middleware/auth')
 
 require('./db')
 
@@ -15,7 +16,7 @@ app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json())
 
-app.use('/api/contacts', contactsRouter)
+app.use('/api/contacts', auth, contactsRouter)
 app.use('/api/auth', authRouter)
 
 app.use((req, res) => {
