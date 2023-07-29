@@ -15,6 +15,10 @@ router.delete('/:contactId', contactsController.removeContact)
 
 router.put('/:contactId', jsonParser, contactsController.updateContact)
 
-router.patch('/:contactId/favorite', jsonParser, contactsController.updateStatusContact)
+router.patch(
+	'/:contactId/favorite',
+	jsonParser,
+	contactsController.updateStatusContact
+)
 
 module.exports = router
