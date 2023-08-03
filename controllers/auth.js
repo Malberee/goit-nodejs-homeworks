@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt')
+const gravatar = require('gravatar')
 const jwt = require('jsonwebtoken')
 
 const User = require('../models/user')
@@ -6,7 +7,7 @@ const User = require('../models/user')
 const JWT_SECRET = process.env.JWT_SECRET
 
 const registerUser = async (req, res, next) => {
-	const { name, email, password } = req.body
+	const { email, password } = req.body
 
 	try {
 		const user = await User.findOne({ email })
@@ -17,7 +18,13 @@ const registerUser = async (req, res, next) => {
 
 		const passwordHash = await bcrypt.hash(password, 10)
 
-		const result = await User.create({ name, email, password: passwordHash })
+		const avatarURL = gravatar.url(email)
+
+		const result = await User.create({
+			email,
+			password: passwordHash,
+			avatarURL,
+		})
 
 		console.log(result)
 
@@ -81,5 +88,5 @@ module.exports = {
 	registerUser,
 	loginUser,
 	logoutUser,
-	currentUser
+	currentUser,
 }
