@@ -36,6 +36,10 @@ function auth(req, res, next) {
 				return res.status(401).json({ error: 'Token Error' })
 			}
 
+			if (!user.verify) {
+				return res.status(401).json({ error: 'Token Expired' })
+			}
+
 			req.user = { id: decode.id }
 
 			next()
