@@ -5,9 +5,10 @@ const cors = require('cors')
 const contactsRouter = require('./routes/api/contacts')
 const authRouter = require('./routes/api/auth')
 const usersRouter = require('./routes/api/users')
-const auth = require('./middleware/auth')
+const auth = require('./middlewares/auth')
 
 require('./db')
+require('./helpers/email')
 
 const app = express()
 
